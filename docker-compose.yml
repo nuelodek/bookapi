@@ -1,0 +1,39 @@
+version: '3'
+services:
+  frontend-api:
+    build: ./frontend
+    ports:
+      - "8000:8000"
+    links:
+      - frontend-db
+    depends_on:
+      - frontend-db
+
+  backend-api:
+    build: ./backend
+    ports:
+      - "8001:8001"
+    links:
+      - backend-db
+    depends_on:
+      - backend-db
+      - redis
+
+  frontend-db:
+    image: mongo
+    ports:
+      - "27017:27017"
+
+  backend-db:
+    image: postgres
+    environment:
+      POSTGRES_DB: library
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
